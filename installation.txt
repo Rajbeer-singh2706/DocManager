@@ -1,0 +1,36 @@
+## DocManager
+# cd docManager 
+#
+## python -m venv 
+## venv\Scripts\activate
+## pip3 install streamlit
+
+
+########### UV ###################
+## OR 
+## uv pin python 3.14.3 
+## uv init
+## uv sync #
+
+
+
+### runngint the code with root itself 
+streamlit run app/main.py
+
+
+### 
+E:\UDSUltimate2.0_repo>
+uv python install 3.14.2
+uv python pin 3.14.2
+uv venv level01
+uv python list
+
+cd level01
+uv init
+
+####### using VENV 
+activate the venv 
+$ level01\Scripts\activate
+$ deactivate 
+
+# (level01) E:\PROJECTS_DIR\DocManager>streamlit run app/main.py
