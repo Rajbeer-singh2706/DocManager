@@ -3,9 +3,6 @@ import os
 
 DB_PATH = os.path.join("data", "documents.db")
 
-
-
-
 class DatabaseManager:
     def __init__(self, db_path=DB_PATH):
         self.db_path = db_path
