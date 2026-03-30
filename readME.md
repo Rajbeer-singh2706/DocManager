@@ -25,3 +25,14 @@ print("BASE_DIR:", BASE_DIR)
 
 ### Once developed , please ask question from teacher #########
 # daily Spend 1 to 2 hour in this project 
+
+#####################
+echo "# DocManager" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Rajbeer-singh2706/DocManager.git
+git push -u origin main
+
+###########
