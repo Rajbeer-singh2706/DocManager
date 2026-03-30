@@ -1,6 +1,6 @@
 """Upload Tab - Handle PDF document uploads with metadata."""
 
-from core.services import DocumentService
+from service.document_service import DocumentService
 
 #import streamlit as st 
 

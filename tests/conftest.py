@@ -23,5 +23,5 @@ def sample_document():
 @pytest.fixture
 def document_service():
     """Fixture for DocumentService."""
-    from core.services import DocumentService
+    from service.document_service import DocumentService
     return DocumentService()

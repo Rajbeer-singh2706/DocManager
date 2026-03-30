@@ -1,7 +1,7 @@
 """Unit tests for core services."""
 
 import pytest
-from core.services import DocumentService
+from service.document_service import DocumentService
 
 
 class TestDocumentService:
