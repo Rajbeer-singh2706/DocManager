@@ -6,8 +6,10 @@ DB_PATH = os.path.join("data", "documents.db")
 class DatabaseManager:
     def __init__(self, db_path=DB_PATH):
         self.db_path = db_path
-        self.conn = None
         self._connect()
+
+    def init_db(self):
+        """Initialize the database and create necessary tables."""
         self._create_tables()
 
     def _connect(self):
@@ -47,7 +49,7 @@ class DatabaseManager:
             print("Database connection closed")
 
 
-### INitialize DB 
-def init_db():
-    db = DatabaseManager()
-    db.close()
+# ### INitialize DB 
+# def init_db():
+#     db = DatabaseManager()
+#     db.close()

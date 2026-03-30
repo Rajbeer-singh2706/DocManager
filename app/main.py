@@ -19,9 +19,9 @@ st.title("Smart PDF Document Manager")
 
 
 ### INitialize DB 
-# def init_db():
-#     db = DatabaseManager()
-#     db.close()
+db = DatabaseManager()
+db.init_db()
+db.close()
 
 ########### TABS ################
 st.divider()

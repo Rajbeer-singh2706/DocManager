@@ -5,6 +5,11 @@ PDF_STORAGE_DIR = os.path.join("storage", "pdfs")
 
 
 class FileManager:
+     def __init__(self):
+        # Ensure pdf storage directory exists
+        if not os.path.exists(PDF_STORAGE_DIR):
+            os.makedirs(PDF_STORAGE_DIR)
+            
      def save_file(self, uploaded_file):
           timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
           filename = f"{timestamp}_{uploaded_file.name}"
