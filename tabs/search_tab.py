@@ -41,7 +41,7 @@ def render_search_tab():
             search_date = st.date_input("Search by date", value=None)
         
         if st.button("Search", key="search_btn"):
-            AnalyticService().record_app_visit("search_document")
+            AnalyticService.record_app_visit("search_document")
             st.session_state.search_results = DocumentService().search_documents(
                 tag=search_tag if search_tag else None,
                 date=str(search_date) if search_date else None
@@ -76,7 +76,7 @@ def render_search_tab():
                         ## Whenever user clicks on OPEN button, it restart the app and open in READER MODE 
 
                         if st.button("Open", key=f"open_{doc.id}"):
-                            AnalyticService().record_app_visit("open_document")
+                            AnalyticService.record_app_visit("open_document")
                             st.session_state.selected_doc = doc 
                             st.session_state.current_page = 0 
                             st.session_state.reader_mode = True
@@ -113,14 +113,14 @@ def render_search_tab():
                 ### Previous BUTTON 
                 with col1:
                     if st.button("⬅ Previous") and current_page > 0:
-                        AnalyticService().record_app_visit("prev_page")
+                        AnalyticService.record_app_visit("prev_page")
                         st.session_state.current_page -=1
                         st.rerun()
                 
                 ## NEXT BUTTON 
                 with col3:
                     if st.button("Next ➡") and current_page < total_pages -1:
-                        AnalyticService().record_app_visit("next_page")
+                        AnalyticService.record_app_visit("next_page")
                         st.session_state.current_page +=1
                         st.rerun()
 
@@ -128,9 +128,20 @@ def render_search_tab():
                 img_path = os.path.join(image_dir, images[st.session_state.current_page])
                 st.image(img_path, width="stretch")
 
+                ## Show the Progress 
+                ## Records Page visit analytics
+                AnalyticService.record_page_visit(doc.id,current_page)
+                unique_pages_viewed = AnalyticService.get_unique_pages_viewed(doc.id)
+
+                progress = (unique_pages_viewed / doc.total_pages) * 100 if doc.total_pages else 0 
+                st.progress(progress/100)
+
+                st.write(f"Progress: {progress:.2f}% ({unique_pages_viewed} / {doc.total_pages})")
+
+
             #
             if st.button("Close Reader"):
-                AnalyticService().record_app_visit("close_reader")
+                AnalyticService.record_app_visit("close_reader")
                 st.session_state.reader_mode = False
                 st.rerun()
 

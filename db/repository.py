@@ -5,12 +5,13 @@ from db.database import DatabaseManager
 class DocumentRepository:
     def __init__(self):
         # Initialize your database connection here
-        self.db_manager = DatabaseManager()
-        self.connection = self.db_manager.conn
+        pass 
     
     def add_document(self, document: Document):
         # Implement logic to add a document to the database
-        cursor = self.connection.cursor()
+        db_manager = DatabaseManager()
+        connection = db_manager.conn
+        cursor = connection.cursor()
         cursor.execute("""
             INSERT INTO documents(
                        name, path, thumbnail_path, tags, description, upload_date, lecture_date, total_pages
@@ -27,11 +28,13 @@ class DocumentRepository:
             document.total_pages
         )
         )
-        self.connection.commit()
-        self.db_manager.close()
+        connection.commit()
+        db_manager.close()
 
     def search_documents(self,tag=None, date = None ):
-        cursor = self.connection.cursor()
+        db_manager = DatabaseManager()
+        connection = db_manager.conn
+        cursor = connection.cursor()
         query = "SELECT * FROM documents"
 
         conditions = []
@@ -53,16 +56,19 @@ class DocumentRepository:
         print("Executing query:", query)
         cursor.execute(query, params)
         rows = cursor.fetchall()
-        self.db_manager.close()
+        db_manager.close()
 
         ## List of documents objects
         return [Document(*row) for row in rows]
 
     def get_all_documents(self):
-        cursor = self.connection.cursor()
+        db_manager = DatabaseManager()
+        connection = db_manager.conn
+        cursor = connection.cursor()
+
         cursor.execute("SELECT * FROM documents")
         rows = cursor.fetchall()
-        self.db_manager.close()
+        db_manager.close()
 
         return [Document(*row) for row in rows]
 

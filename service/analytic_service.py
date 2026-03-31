@@ -2,14 +2,29 @@ from datetime import datetime
 from db.database import DatabaseManager
 
 class AnalyticService:
-    def __init__(self):
-        # Initialize your database connection here
-        self.db_manager = DatabaseManager()
-        self.connection = self.db_manager.conn
+    @staticmethod
+    def record_page_visit(document_id, page_number):
+        """Record a page visit event."""
+        db_manager = DatabaseManager()
+        connection = db_manager.conn
+        cursor = connection.cursor()
 
-    def record_app_visit(self, event_type):
+        cursor.execute("""
+        INSERT INTO page_visits (document_id, page_number, timestamp)
+        VALUES (?, ?, ?)
+        """, (
+                document_id, page_number, datetime.now().isoformat()
+             )
+        )
+        connection.commit()
+        db_manager.close()
+
+    @staticmethod
+    def record_app_visit(event_type):
         """Record an application visit event."""
-        cursor = self.connection.cursor()
+        db_manager = DatabaseManager()
+        connection = db_manager.conn
+        cursor = connection.cursor()
 
         cursor.execute("""
         INSERT INTO app_visits (event_type, timestamp)
@@ -18,12 +33,15 @@ class AnalyticService:
                 event_type, datetime.now().isoformat()
              )
         )
-        self.connection.commit()
-        self.db_manager.close()
+        connection.commit()
+        db_manager.close()
 
-    def get_app_visits(self):
+    @staticmethod
+    def get_app_visits():
         """Get application visit data."""
-        cursor = self.connection.cursor() 
+        db_manager = DatabaseManager()
+        connection = db_manager.conn
+        cursor = connection.cursor()
 
         cursor.execute("""
             SELECT 
@@ -33,12 +51,15 @@ class AnalyticService:
         """)
 
         rows = cursor.fetchall()
-        self.db_manager.close()
+        db_manager.close()
         return rows 
 
-    def get_unique_pages_viewed(self,document_id):
+    @staticmethod
+    def get_unique_pages_viewed(document_id):
         """Get the number of unique pages viewed for a document."""
-        cursor = self.connection.cursor()
+        db_manager = DatabaseManager()
+        connection = db_manager.conn
+        cursor = connection.cursor()
 
         cursor.execute("""
             SELECT COUNT(DISTINCT page_number) 
@@ -47,9 +68,27 @@ class AnalyticService:
         """, (document_id,))
 
         result = cursor.fetchone()
-        self.db_manager.close()
+        db_manager.close()
         return result[0] if result else 0
 
-        
+    @staticmethod
+    def reset_analytics():
+        """Reset all analytics data."""
+        db_manager = DatabaseManager()
+        connection = db_manager.conn
+        cursor = connection.cursor()
+
+        cursor.execute("DELETE FROM page_visits")
+        cursor.execute("DELETE FROM app_visits")
+
+        #cursor.execute("truncate TABLE page_visits")
+        #cursor.execute("truncate app_visits")
+
+        connection.commit()
+        db_manager.close()
 
 ## Table Name : page_visits or page_views
+## Here is one problem , if we create a object --> one connection will be created and it will be closed after one method call, 
+# so we need to create connection for each method call and close it after that, otherwise we can create connection in init and 
+# close it in destructor but it is not recommended way because if we forget to close the connection then it will lead to memory leak,
+#  so better way is to create connection for each method call and close it after that.
