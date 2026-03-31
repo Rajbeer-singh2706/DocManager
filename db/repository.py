@@ -30,7 +30,41 @@ class DocumentRepository:
         self.connection.commit()
         self.db_manager.close()
 
+    def search_documents(self,tag=None, date = None ):
+        cursor = self.connection.cursor()
+        query = "SELECT * FROM documents"
+
+        conditions = []
+        params = []
+
+        ##  WHERE , OR 
+
+        if tag:
+            conditions.append("tags LIKE ?")
+            params.append(f"%{tag}%")
         
+        if date:
+            conditions.append("lecture_date = ?")
+            params.append(date)
+
+        if conditions: 
+            query += " WHERE " + " OR ".join(conditions)
+        
+        print("Executing query:", query)
+        cursor.execute(query, params)
+        rows = cursor.fetchall()
+        self.db_manager.close()
+
+        ## List of documents objects
+        return [Document(*row) for row in rows]
+
+    def get_all_documents(self):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * FROM documents")
+        rows = cursor.fetchall()
+        self.db_manager.close()
+
+        return [Document(*row) for row in rows]
 
     # def save_document(self, document_data):
     #     # Implement logic to save document data to the database
@@ -46,4 +80,4 @@ class DocumentRepository:
 
     # def delete_document(self, document_id):
     #     # Implement logic to delete a document by its ID
-    #     pass
+    #     pas

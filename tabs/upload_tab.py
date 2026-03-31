@@ -1,7 +1,9 @@
 """Upload Tab - Handle PDF document uploads with metadata."""
 
 from service.document_service import DocumentService
+from service.analytic_service import AnalyticService
 
+    
 #import streamlit as st 
 
 class UploadTab:
@@ -9,6 +11,7 @@ class UploadTab:
 
     def __init__(self, st):
         self.document_service = DocumentService()
+        self.analytics_service = AnalyticService() 
         self.st = st
 
     def render_upload_tab(self):
@@ -32,6 +35,11 @@ class UploadTab:
         if self.st.button("Upload Document", key="upload_btn"):
             if uploaded_file:
                 self.document_service.upload_document(uploaded_file, tags, description, lecture_date)
+                self.analytics_service.record_app_visit("document_uploaded")
                 self.st.success("Document uploaded successfully!")
             else:
                 self.st.error("Please fill in all fields")
+
+
+## check this as a decorator for all buttons 
+## self.analytics_service.record_app_visit("document_uploaded")

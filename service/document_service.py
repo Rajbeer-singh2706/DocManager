@@ -1,5 +1,12 @@
-from datetime import datetime
+# upload document
+# --> uploaded_file, tags, document, date
+# --> uploaded_file --> test.pdf
+# --> uploaded_file --> test.pdf --> thumbnail
+# --> uploaded_file --> folder with the same name as pdf file --> test --> extract all images -> 0.jpg, 1.jpg
+# --> uploaded_file -> total pages
+# upload_date -> time, datetime
 
+from datetime import datetime
 from db.repository import DocumentRepository
 from core.file_manager import FileManager
 from core.thumbnail import ThumbnailGenerator
@@ -46,3 +53,11 @@ class DocumentService:
 
         # 7. Save to DB
         self.repo.add_document(doc)
+    
+    def search_documents(self, tag=None, date=None):
+        """Search documents based on tag or date."""
+        return self.repo.search_documents(tag=tag, date=date)
+
+    def get_all_documents(self):
+        """Get all documents from the database."""
+        return self.repo.get_all_documents()

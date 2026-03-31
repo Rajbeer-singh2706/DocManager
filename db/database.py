@@ -37,6 +37,24 @@ class DatabaseManager:
                     total_pages INTEGER
                 )
             """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS page_visits(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    document_id INTEGER,
+                    page_number INTEGER,
+                    timestamp TEXT       
+                )
+            """)
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS app_visits(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    event_type TEXT,
+                    timestamp TEXT       
+                )
+            """)
+
             self.conn.commit()
             print("Tables created successfully")
         except sqlite3.Error as e:
